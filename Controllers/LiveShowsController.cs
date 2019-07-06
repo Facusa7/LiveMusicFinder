@@ -60,7 +60,7 @@ namespace LiveMusicFinder.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Atrist,Venue,ShowDate")] LiveShow liveShow)
+        public async Task<IActionResult> Create([Bind("Id,Artist,Venue,ShowDate")] LiveShow liveShow)
         {
             liveShow.EnteredBy = User.Identity.Name;
             if (ModelState.IsValid)
@@ -76,12 +76,14 @@ namespace LiveMusicFinder.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUser = User.Identity.Name;
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var liveShow = await _context.LiveShows.FindAsync(id);
+            var liveShow = await _context.LiveShows.Where(x => x.Id == id && x.EnteredBy == currentUser).FirstOrDefaultAsync();
             if (liveShow == null)
             {
                 return NotFound();
