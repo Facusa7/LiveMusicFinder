@@ -23,9 +23,29 @@ namespace LiveMusicFinder.Controllers
         // GET: LiveShows
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            return View(await _context.LiveShows.ToListAsync());
+            var list = await _context.LiveShows.ToListAsync();
+
+            if (string.IsNullOrWhiteSpace(sortOrder)) return View(list);
+
+            switch (sortOrder)
+            {
+                case "Artist":
+                    list = list.OrderBy(x => x.Artist).ToList();
+                    break;
+                case "Venue":
+                    list = list.OrderBy(x => x.Venue).ToList();
+                    break;
+                case "ShowDate":
+                    list = list.OrderBy(x => x.ShowDate).ToList();
+                    break;
+                case "EnteredBy":
+                    list = list.OrderBy(x => x.EnteredBy).ToList();
+                    break;
+            }
+
+            return View(list);
         }
 
         // GET: LiveShows/Details/5
