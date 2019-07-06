@@ -11,6 +11,7 @@ namespace LiveMusicFinder.Models
     [Required]
     public string Venue { get; set; }
     public DateTime ShowDate { get; set; }
+    [Required]
     public string EnteredBy { get; set; }
   }
 }

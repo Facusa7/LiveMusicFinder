@@ -100,6 +100,7 @@ namespace LiveMusicFinder.Controllers
         public async Task<IActionResult> Edit(int id, [Bind("Id,Artist,Venue,ShowDate")] LiveShow liveShow)
         {
             var currentUser = User.Identity.Name;
+            liveShow.EnteredBy = currentUser;
             if (id != liveShow.Id)
             {
                 return NotFound();
