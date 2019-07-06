@@ -22,14 +22,14 @@ namespace LiveMusicFinder.Controllers
 
         // GET: LiveShows
 
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.LiveShows.ToListAsync());
         }
 
         // GET: LiveShows/Details/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -58,8 +58,8 @@ namespace LiveMusicFinder.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
         public async Task<IActionResult> Create([Bind("Id,Atrist,Venue,ShowDate")] LiveShow liveShow)
         {
             liveShow.EnteredBy = User.Identity.Name;
@@ -73,7 +73,7 @@ namespace LiveMusicFinder.Controllers
         }
 
         // GET: LiveShows/Edit/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -93,8 +93,8 @@ namespace LiveMusicFinder.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Atrist,Venue,ShowDate")] LiveShow liveShow)
         {
             var currentUser = User.Identity.Name;
@@ -139,7 +139,7 @@ namespace LiveMusicFinder.Controllers
         }
 
         // GET: LiveShows/Delete/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -159,8 +159,8 @@ namespace LiveMusicFinder.Controllers
 
         // POST: LiveShows/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        //[ValidateAntiForgeryToken]
+        //[Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var liveShow = await _context.LiveShows.FirstOrDefaultAsync();
