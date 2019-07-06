@@ -163,7 +163,7 @@ namespace LiveMusicFinder.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var liveShow = await _context.LiveShows.FirstOrDefaultAsync();
+            var liveShow = await _context.LiveShows.FirstOrDefaultAsync(x => x.Id == id);
             _context.LiveShows.Remove(liveShow);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
