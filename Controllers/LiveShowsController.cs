@@ -90,6 +90,14 @@ namespace LiveMusicFinder.Controllers
             liveShow.EnteredBy = User.Identity.Name;
             if (ModelState.IsValid)
             {
+
+                var show = _context.LiveShows.FirstOrDefault(x => x.Artist == liveShow.Artist && x.ShowDate == liveShow.ShowDate);
+                    
+                if (show != null)
+                {
+                    return ValidationProblem();
+                }
+
                 _context.Add(liveShow);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -149,6 +157,13 @@ namespace LiveMusicFinder.Controllers
                     if(existingShow.EnteredBy != User.Identity.Name)
                     {
                         return Unauthorized();
+                    }
+
+                    var show = _context.LiveShows.FirstOrDefault(x => x.Artist == existingShow.Artist && x.ShowDate == liveShow.ShowDate);
+                    
+                    if (show != null)
+                    {
+                        return ValidationProblem();
                     }
 
                     _context.Update(existingShow);
