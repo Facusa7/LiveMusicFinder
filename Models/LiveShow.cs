@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LiveMusicFinder.Models
@@ -11,7 +12,8 @@ namespace LiveMusicFinder.Models
     [Required]
     public string Venue { get; set; }
     public DateTime ShowDate { get; set; }
-    [Required]
     public string EnteredBy { get; set; }
+    
+    public List<Venue> Venues { get; set; }
   }
 }

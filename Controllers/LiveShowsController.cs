@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using LiveMusicFinder.Data;
 using LiveMusicFinder.Models;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace LiveMusicFinder.Controllers
 {
@@ -71,7 +74,9 @@ namespace LiveMusicFinder.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            return View();
+            var venues = GetVenues();
+            var model = new LiveShow {Venues = venues};
+            return View(model);
         }
 
         // POST: LiveShows/Create
@@ -104,10 +109,14 @@ namespace LiveMusicFinder.Controllers
             }
 
             var liveShow = await _context.LiveShows.Where(x => x.Id == id && x.EnteredBy == currentUser).FirstOrDefaultAsync();
+
             if (liveShow == null)
             {
                 return NotFound();
             }
+
+            liveShow.Venues = GetVenues();
+
             return View(liveShow);
         }
 
@@ -195,6 +204,28 @@ namespace LiveMusicFinder.Controllers
         private bool LiveShowExists(int id)
         {
             return _context.LiveShows.Any(e => e.Id == id);
+        }
+
+        private static List<Venue> GetVenues()
+        {
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.Headers.Add("Accept", "application/json");
+                    client.Headers.Add("x-api-key", "6dgJUQD8JSb-TvbOH4jkI_6uga6KrgydMGp7");
+
+                    var result = client.DownloadString("https://api.setlist.fm/rest/1.0/search/venues?cityName=Vienna&amp;count\r\nry=AT&amp;p=1");
+                    var venueData = JsonConvert.DeserializeObject<VenueData>(result);
+                    return venueData.Venue;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return new List<Venue>();
+            }
+            
         }
     }
 }
